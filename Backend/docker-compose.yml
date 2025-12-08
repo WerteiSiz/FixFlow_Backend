@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  api_gateway:
+    build:
+      context: ./api_gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - service_users
+      - service_orders
+    environment:
+      - USERS_URL=http://service_users:8001
+      - ORDERS_URL=http://service_orders:8002
+      - JWT_SECRET=super-secret-change-this
+    networks:
+      - appnet
+
+  service_users:
+    build:
+      context: ./service_users
+    ports:
+      - "8001:8001"
+    volumes:
+      - users_data:/data
+    environment:
+      - JWT_SECRET=super-secret-change-this
+    networks:
+      - appnet
+
+  service_orders:
+    build:
+      context: ./service_orders
+    ports:
+      - "8002:8002"
+    volumes:
+      - orders_data:/data
+    environment:
+      - JWT_SECRET=super-secret-change-this
+    networks:
+      - appnet
+
+volumes:
+  users_data:
+  orders_data:
+
+networks:
+  appnet:

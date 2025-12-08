@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+databases
+alembic
+passlib[bcrypt]
+PyJWT
+pydantic
+python-multipart
+fastapi-pagination
