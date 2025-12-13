@@ -9,9 +9,10 @@ services:
       - service_users
       - service_orders
     environment:
-      - USERS_URL=http://service_users:8001
-      - ORDERS_URL=http://service_orders:8002
+      - USERS_URL=http://service_users:8001/v1
+      - ORDERS_URL=http://service_orders:8002/v1
       - JWT_SECRET=super-secret-change-this
+      - OTEL_COLLECTOR_URL=http://otel-collector:4318
     networks:
       - appnet
 
@@ -24,6 +25,8 @@ services:
       - users_data:/data
     environment:
       - JWT_SECRET=super-secret-change-this
+      - OTEL_COLLECTOR_URL=http://otel-collector:4318
+      - OTEL_COLLECTOR_URL=http://otel-collector:4318
     networks:
       - appnet
 
@@ -36,6 +39,18 @@ services:
       - orders_data:/data
     environment:
       - JWT_SECRET=super-secret-change-this
+      - OTEL_COLLECTOR_URL=http://otel-collector:4318
+      - OTEL_COLLECTOR_URL=http://otel-collector:4318
+    networks:
+      - appnet
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.79.0
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    ports:
+      - "4318:4318"
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
     networks:
       - appnet
 
